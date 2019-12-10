@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, user-scalable=0, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+        <!-- Bootstrap -->
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <meta name="keywords" content="ec-cubeプラグイン検索" />
+        <meta name="description" content="ec-cubeプラグイン検索" />
+        <title>TOP - ec-cubeプラグイン検索</title>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
+            <a class="navbar-brand" href="/">ec-cubeプラグイン検索</a>
+        </nav>
+
+        <div class="container-fluid" id="app">
+            <h2>TOP</h2>
+
+            <h3>検索条件(上位30件を表示します)</h3>
+
+            <div class="form-group">
+              <label for="category_id" class="control-label">カテゴリID</label>
+              <select id="category_id" class="form-control" v-model="condition.category_id">
+                <option value="3">決済</option>
+                <option value="7">デザインテンプレート</option>
+                <option value="8">機能カスタマイズ</option>
+                <option value="4">集客</option>
+                <option value="5">顧客管理・販促</option>
+                <option value="6">物流・在庫管理</option>
+                <option value="13">SNS</option>
+                <option value="9">商用ライセンス</option>
+                <option value="10">その他</option>
+              </select>
+              <label for="price_type" class="control-label">価格</label>
+              <select id="price_type" class="form-control" v-model="condition.price_type">
+                <option value=""></option>
+                <option value="0">有料</option>
+                <option value="1">無料</option>
+              </select>
+            </div>
+
+            <h3>検索結果</h3>
+
+            <div class="row justify-content-center" v-if="waiting">
+              <div class="col-auto">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
+            </div>
+            <div class="row justify-content-center" v-else>
+              <div class="col-auto">
+                <div class="alert alert-info">
+                  {{ Object.keys(products).filter(v => !isNaN(v)).length }} 件のプラグインが見つかりました。
+                </div>
+              </div>
+              <div class="col-auto">
+                <table class="table table-striped table-bordered table-condensed">
+                  <colgroup>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th>コード</th>
+                      <th>名前</th>
+                      <th>説明</th>
+                      <th>価格</th>
+                      <th>イメージ1</th>
+                      <th>イメージ2</th>
+                      <th>イメージ3</th>
+                      <th>更新日時</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="product in products">
+                      <td>
+                        <a v-bind:href="'https://www.ec-cube.net/products/detail.php?product_id=' + product.product_id" target="_blank">{{ product.product_code_min }}</a>
+                      </td>
+                      <td>
+                        <a v-bind:href="'https://www.ec-cube.net/products/detail.php?product_id=' + product.product_id" target="_blank">{{ product.name }}</a>
+                      </td>
+                      <td>{{ product.main_list_comment }}</td>
+                      <td style="text-align: right;">{{ product.price02_min }}</td>
+                      <td><img v-bind:src="'https://www.ec-cube.net/upload/save_image/' + product.main_list_image" style="width: 200px;"></td>
+                      <td><img v-bind:src="'https://www.ec-cube.net/upload/save_image/' + product.mini_list_image"></td>
+                      <td><img v-bind:src="'https://www.ec-cube.net/upload/save_image/' + product.main_image" style="width: 200px;"></td>
+                      <td>{{ (product.update_date + '').toString().substring(0, 10) }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+        </div>
+
+        <footer class="page-footer font-small bottom bg-dark text-light">
+            <div class="footer-copyright text-center py-3">
+            <p>Copyright © 2019-2019 <a href="https://genzouw.com">genzouw</a> All Rights Reserved.</p>
+            <p>( twitter:<a href="https://twitter.com/genzouw">@genzouw</a> , facebook:<a href="https://www.facebook.com/genzouw">genzouw</a>, mailto:<a href="mailto:genzouw@gmail.com">genzouw@gmail.com</a> )</p>
+            </div>
+        </footer>
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script>
+let app = new Vue({
+  el: "#app",
+  data: {
+    products: [],
+    condition: {
+      category_id: 3,
+      price_type: null,
+    },
+    waiting: false,
+  },
+  methods : {
+    refresh: function() {
+      this.waiting = true
+
+      axios({
+        method: 'GET',
+        url: `https://www.ec-cube.net/products/list.php?category_id=${this.condition.category_id}&mode=json&price_type=${this.condition.price_type}`,
+      }).then((res) => {
+        if (res.data) {
+          data = res.data
+
+          console.log(data)
+
+          this.products = data
+          this.waiting = false
+        }
+      }).catch((res) => {
+        console.error(res)
+      })
+    }
+  },
+  created() {
+    this.refresh()
+  },
+  watch: {
+    "condition.category_id": function (val, oldVal) {
+      this.refresh()
+    },
+    "condition.price_type": function (val, oldVal) {
+      this.refresh()
+    }
+  }
+})
+        </script>
+    </body>
+</html>
